@@ -22,3 +22,10 @@ INCLUDEPATH =+ C:\Qwt-6.0.1\include
 LIBPATH =+ C:\Qwt-6.0.1\lib
 
 LIBS += -lqwt
+
+OTHER_FILES += \
+    import2.csv \
+    import.csv
+
+RESOURCES += \
+    resources.qrc

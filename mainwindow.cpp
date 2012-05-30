@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setMinimumSize(WIDTH,HEIGHT);
 
     plot.setGeometry(0,0,640,400);
-    plot.setAxisScale(QwtPlot::xBottom, 0.0,150.0);
-    plot.setAxisScale(QwtPlot::yLeft,0.0,150.0);
+    plot.setAxisScale(QwtPlot::xBottom, 0.0,160.0);
+    plot.setAxisScale(QwtPlot::yLeft,0.0,160.0);
     plot.setCanvasBackground(Qt::white);
 
     //plotCurve.setSymbol(QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::darkMagenta), QSize(5, 5) ) );

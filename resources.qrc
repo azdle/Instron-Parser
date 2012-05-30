@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>toolbox.ico</file>
+    </qresource>
+</RCC>
