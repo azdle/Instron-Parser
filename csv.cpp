@@ -19,7 +19,11 @@ CSV::CSV(QString &string){
 
 CSV::~CSV()
 {
-	//delete m_codec;
+    //delete m_codec;
+    m_device = NULL;
+    m_string = "";
+    m_pos = 0;
+    m_line.clear();
 }
 
 void CSV::setCodec(const char* codecName){
@@ -45,9 +49,13 @@ QString CSV::readLine(){
 	if((m_pos = m_rx.indexIn(m_string,m_pos)) != -1) {
 		line = m_rx.cap(1);		
 		m_pos += m_rx.matchedLength();
-	}
+    }
 	return line;
 	
+}
+
+QStringList CSV::currentLine(){
+    return m_line;
 }
 
 QStringList CSV::parseLine(){
@@ -59,7 +67,7 @@ QStringList CSV::parseLine(QString line){
 	int pos2 = 0;
     QRegExp rx2("(?:\"([^\"]*)\",?)|(?:([^,]*),?)");
 	if(line.size()<1){
-        //list << "";
+        list << "";
 	}else while (line.size()>pos2 && (pos2 = rx2.indexIn(line, pos2)) != -1) {
 		QString col;
 		if(rx2.cap(1).size()>0)
@@ -74,6 +82,9 @@ QStringList CSV::parseLine(QString line){
 		else
 			pos2++;
 	}
+
+    m_line = list;
+
 	return list;
 }
 

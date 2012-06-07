@@ -22,8 +22,9 @@ public:
 	~CSV();
 
 	QString readLine();
+    QStringList currentLine();
 	QStringList parseLine();
-	static QStringList parseLine(QString line);
+    QStringList parseLine(QString line);
     bool atEnd();
 
 	void setCodec(const char* codecName);
@@ -33,6 +34,7 @@ private:
 	QString m_string;
 	int m_pos;
     QRegExp m_rx;
+    QStringList m_line;
 	
 };
 
