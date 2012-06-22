@@ -12,13 +12,18 @@ MainWindow::MainWindow(QWidget *parent)
     curveCount = -1;
     displayCurve = 0;
 
+    clipboard = QApplication::clipboard();
+
     fileMenu = menuBar()->addMenu(tr("&File"));
     helpMenu = menuBar()->addMenu(tr("&Help"));
-    openAction = new QAction(tr("&Open"), this);
+    openAction = new QAction(tr("&Open Sample Data"), this);
+    copyAction = new QAction(tr("&Copy Data to Clipboard"), this);
     quitAction = new QAction(tr("&Quit"), this);
     aboutAction = new QAction(tr("&About"), this);
 
     fileMenu->addAction(openAction);
+    fileMenu->addAction(copyAction);
+    fileMenu->addSeparator();
     fileMenu->addAction(quitAction);
     helpMenu->addAction(aboutAction);
 
@@ -65,15 +70,13 @@ MainWindow::MainWindow(QWidget *parent)
     middleButtonBox = new QHBoxLayout();
     quitButtonBox = new QHBoxLayout();
 
-
-
     pbSelect = new QPushButton(tr("Select File(s)"), this);
-    pbExport = new QPushButton(tr("Export Data"), this);
+    pbExport = new QPushButton(tr("Copy Data to Clipboard"), this);
     pbQuit = new QPushButton(tr("Quit"), this);
     pbNext = new QPushButton(tr("->"), this);
     pbPrev = new QPushButton(tr("<-"), this);
-
-    pbExport->setDisabled(true);
+    cbClearOnNew = new QCheckBox(tr("Clear Existing Data On Import"));
+    cbClearOnNew->setChecked(true);
 
     tvOutput = new QTableView();
     tvOutput->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -87,11 +90,15 @@ MainWindow::MainWindow(QWidget *parent)
              QStringList() << tr("Extension (mm)")
                            << tr("Min Force (N/cm)"));
 
+    tvOutput->resizeColumnsToContents();
+
     pbQuit->setMinimumWidth(150);
 
     topButtonBox->addWidget(pbSelect);
     topButtonBox->addWidget(pbExport);
 
+    middleButtonBox->addSpacing(5);
+    middleButtonBox->addWidget(cbClearOnNew);
     middleButtonBox->addStretch();
     middleButtonBox->addWidget(pbPrev);
     middleButtonBox->addWidget(pbNext);
@@ -110,6 +117,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(pbSelect, SIGNAL(clicked()), this, SLOT(selectFiles()));
     connect(openAction, SIGNAL(triggered()), this, SLOT(selectFiles()));
+    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyTableContents()));
     connect(pbQuit, SIGNAL(clicked()), this, SLOT(close()));
     connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));
     connect(aboutAction, SIGNAL(triggered()), aboutDialog, SLOT(open()));
@@ -119,6 +127,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pbNext, SIGNAL(clicked()), this, SLOT(nextPlotAction()));
     connect(plotPicker, SIGNAL(selected(QRectF)), this, SLOT(plotPointSelectedAction(QRectF)));
     //connect(plotPicker, SIGNAL(activated(bool)), this, SLOT(plotPickerActiveAction(bool)));
+
+    connect(pbExport, SIGNAL(clicked()), this, SLOT(copyTableContents()));
 }
 MainWindow::~MainWindow()
 {
@@ -140,7 +150,15 @@ void MainWindow::selectFiles()
 
     if (!fileList.isEmpty())
     {
-        //TODO: Delete Existing Plots/Data
+
+        if(cbClearOnNew->isChecked()){
+            //TODO: Delete Existing Plots/Data
+            plotCurves.clear();
+            imData->clear();
+            curveCount = -1;
+            displayCurve = 0;
+        }
+
         this->processFiles(fileList);
     }else
     {
@@ -371,3 +389,29 @@ void MainWindow::output( QString line ) { //append and scroll to end if already 
     }
 }
 
+void MainWindow::copyTableContents(){
+    //qDebug() << "Copy Called";
+
+    if(curveCount <= 0){
+    sbStatus->showMessage("You must select some data first.", 3000);
+    }else{
+
+        QString copyString;
+
+        for(int i=0;i<=curveCount;i++){
+            copyString.append(imData->item(i,0)->text());
+            copyString.append("\t");
+            copyString.append(imData->item(i,1)->text());
+            copyString.append("\n");
+        }
+
+
+        clipboard->setText(copyString, QClipboard::Clipboard);
+
+        copyString.clear();
+
+        sbStatus->showMessage("Data copied to clipboard.", 3000);
+
+    }
+
+}

@@ -4,6 +4,7 @@
 #include<QMainWindow>
 #include<QApplication>
 #include<QPushButton>
+#include<QCheckBox>
 #include<QLabel>
 #include<QFile>
 #include<QFileDialog>
@@ -22,6 +23,7 @@
 #include<QMenu>
 #include<QMenuBar>
 #include<QAction>
+#include<QClipboard>
 #include<QMessageBox>
 #include<qwt_plot.h>
 #include<qwt_plot_curve.h>
@@ -51,12 +53,14 @@ class MainWindow : public QMainWindow
         void plotPointSelectedAction(QRectF);
         void plotPickerActiveAction(bool on);
         void output(QString);
+        void copyTableContents();
 
     private:
         //QMenuBar *menuBar;
         QMenu *fileMenu;
         QMenu *helpMenu;
         QAction *openAction;
+        QAction *copyAction;
         QAction *quitAction;
         QAction *aboutAction;
         QMessageBox *aboutDialog;
@@ -65,6 +69,7 @@ class MainWindow : public QMainWindow
         QLabel *label;
         QFileDialog *fileD;
         QStringList fileList;
+        QClipboard *clipboard;
 
         QStatusBar *sbStatus;
 
@@ -81,6 +86,7 @@ class MainWindow : public QMainWindow
         QPushButton *pbQuit;
         QPushButton *pbNext;
         QPushButton *pbPrev;
+        QCheckBox   *cbClearOnNew;
 
         QTableView *tvOutput;
         QStandardItemModel *imData;

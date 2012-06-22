@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-TARGET = Raw
+TARGET = Barrett-Data
 TEMPLATE = app
 
 
@@ -17,7 +17,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     csv.h
 
-INCLUDEPATH =+ C:\Qwt-6.0.1\include
+INCLUDEPATH =+ C:\Qwt-6.0.1\include \
+                /usr/include/qwt
 
 LIBPATH =+ C:\Qwt-6.0.1\lib
 
