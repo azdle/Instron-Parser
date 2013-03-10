@@ -1,4 +1,4 @@
-#Instron Parser - The Barret Data Toolbox
+#Instron Parser - The Barrett Data Toolbox
 ##Description
 This program is designed to take a set of files that the Bluehill control software for an Instron load frame will output when configured to export raw data.
 ##Usage
